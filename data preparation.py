@@ -2,15 +2,18 @@ import matplotlib.pyplot
 import matplotlib.pyplot as plt
 import numpy as np
 from skimage.color import rgb2lab, lab2rgb
-import tensorflow.keras.backend as K
-
+from PIL import Image
 
 
 
 def processed_image(img):
+    if not type(img) == Image:
+        img = Image.fromarray(np.squeeze(img))
+
+    img = img.resize((224, 224))
     image = np.array(img, dtype=float)
+
     print(image.shape)
-    # assert image.shape == ()
     size = image.shape
     lab = rgb2lab(1.0 / 255 * image)
     X, ab = lab[:, :, 0], lab[:, :, 1:]
@@ -22,11 +25,15 @@ def processed_image(img):
 
 
 def create_data_imagenet():
-    # (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-    # print(x_train.shape)
-    # plt.imshow(x_train[0])
-    # plt.show()
-    print(dir(K))
+    ph = Image.open("i1.jpg")
+    x,ab,s = processed_image(ph)
+    plt.imshow(np.squeeze(x))
+    plt.show()
+    print(np.max(x))
+
+
+
+
 
 
 
