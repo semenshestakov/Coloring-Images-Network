@@ -30,7 +30,7 @@ def create_data_imagenet():
     lab_ab_in_rgb(x, ab)
 
 
-def data_for_vgg():
+def data_for_vgg(img):
     if not type(img) == Image:
         img = Image.fromarray(np.squeeze(img))
 
