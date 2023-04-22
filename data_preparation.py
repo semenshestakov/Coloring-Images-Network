@@ -8,6 +8,19 @@ from tensorflow.keras.applications import VGG19
 vgg19_cl = VGG19()
 
 
+def grey_in_lab(img: np.array):
+    """
+
+    :param img:
+    :return: x, ab - x this grea
+    """
+    if img.shape[-1] != 3:
+        img = convert_1D_to_3d(img)  # 1, none, none , 3
+
+    x, ab, _ = processed_image(img)
+    return x, ab
+
+
 def processed_image(img):
     image = conver_good_size(img)
     size = image.shape
@@ -22,7 +35,7 @@ def processed_image(img):
 
 def create_data_imagenet():
     ph = Image.open("i1.jpg")
-    x, ab, rgb = processed_image(ph)
+    x, ab, rgb = processed_image(np.squeeze(ph))
     a = np.zeros((1, 224, 224, 3))
     a[0, :, :, 0] = x[0, :, :, 0]
     a[0, :, :, 1] = x[0, :, :, 0]
@@ -30,8 +43,17 @@ def create_data_imagenet():
     return x, ab, rgb
 
 
+def convert_1D_to_3d(img: np.array):
+    img = np.squeeze(img)
+    temp = np.zeros((*img.shape, 3))
+    temp[:, :, 0] = img[:, :, ]
+    temp[:, :, 1] = img[:, :, ]
+    temp[:, :, 2] = img[:, :, ]
+    return np.expand_dims(temp, axis=0)
+
+
 def conver_good_size(img):
-    if not type(img) == Image:
+    if type(img) != Image:
         img = Image.fromarray(np.squeeze(img))
 
     img = img.resize((224, 224))
@@ -39,12 +61,12 @@ def conver_good_size(img):
     return image
 
 
-def avg_photo():
+def avg_photo(ph):
     ph = np.array(ph)
     ph = np.expand_dims(ph, axis=0)
     avg = np.sum(ph, axis=3) / 3
     avg.shape = (1, 224, 224, 1)
-    return avg, ph
+    return avg
 
 
 def data_for_vgg(img):
