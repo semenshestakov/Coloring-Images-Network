@@ -4,8 +4,32 @@ import numpy as np
 from skimage.color import rgb2lab, lab2rgb
 from PIL import Image
 from tensorflow.keras.applications import VGG19
+import tensorflow_datasets as tfds
 
 vgg19_cl = VGG19()
+
+
+class IteratorImages:
+    def __init__(
+            self,
+            name_dataset: str = 'imagewang',
+            drop_size: int = 1,
+            split: str = "train",
+            return_name: str = "image"
+    ):
+        builder = tfds.builder(name_dataset)
+        ds = builder.as_dataset(split=split, shuffle_files=True)
+        self.ds = ds.take(drop_size)
+        self.name = return_name
+
+    def __next__(self):
+        for ex in self.ds:
+            res = ex[self.name]
+            x, y, rgb = processed_image(res)
+            return x, y
+
+    def __iter__(self):
+        return self
 
 
 def grey_in_lab(img: np.array):
@@ -34,7 +58,7 @@ def processed_image(img):
 
 
 def create_data_imagenet():
-    ph = Image.open("i1.jpg")
+    ph = Image.open("i3.jpeg")
     x, ab, rgb = processed_image(np.squeeze(ph))
     a = np.zeros((1, 224, 224, 3))
     a[0, :, :, 0] = x[0, :, :, 0]
