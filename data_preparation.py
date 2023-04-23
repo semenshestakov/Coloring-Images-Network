@@ -15,21 +15,42 @@ class IteratorImages:
             name_dataset: str = 'imagewang',
             drop_size: int = 1,
             split: str = "train",
-            return_name: str = "image"
+            return_name: str = "image",
+            size_image: tuple = (224, 224),
+            load: bool = False
     ):
         builder = tfds.builder(name_dataset)
         ds = builder.as_dataset(split=split, shuffle_files=True)
         self.ds = ds.take(drop_size)
         self.name = return_name
+        self.size_image = size_image
+        self.load = load
 
     def __next__(self):
         for ex in self.ds:
             res = ex[self.name]
-            x, y, rgb = processed_image(res)
-            return x, y
+            x, y = self.processed_image(res, self.size_image)
+            return x, y if self.load else x, y, ex["label"]
 
     def __iter__(self):
         return self
+
+    def processed_image(self, img, size):
+        batch = img.shape[0]
+        temp_x = np.zeros(shape=(batch, *size, 1), dtype=np.float32)
+        temp_y = np.zeros(shape=(batch, *size, 2), dtype=np.float32)
+
+        i = 0
+        for im in img:
+            image = conver_good_size(im, size)
+            lab = rgb2lab(1.0 / 255 * im)
+            X, ab = lab[:, :, 0], lab[:, :, 1:]
+
+            ab /= 128
+            temp_x[i] = X.reshape(size[0], size[1], 1)
+            temp_y[i] = ab.reshape(size[0], size[1], 2)
+            i += 1
+        return temp_x, temp_y
 
 
 def grey_in_lab(img: np.array):
@@ -45,8 +66,8 @@ def grey_in_lab(img: np.array):
     return x, ab
 
 
-def processed_image(img):
-    image = conver_good_size(img)
+def processed_image(img, size_image=(224, 224)):
+    image = conver_good_size(img, size_image)
     size = image.shape
     lab = rgb2lab(1.0 / 255 * image)
     X, ab = lab[:, :, 0], lab[:, :, 1:]
@@ -76,11 +97,11 @@ def convert_1D_to_3d(img: np.array):
     return np.expand_dims(temp, axis=0)
 
 
-def conver_good_size(img):
+def conver_good_size(img, size_image=(224, 224)):
     if type(img) != Image:
         img = Image.fromarray(np.squeeze(img))
 
-    img = img.resize((224, 224))
+    img = img.resize(size_image)
     image = np.array(img, dtype=float)
     return image
 
