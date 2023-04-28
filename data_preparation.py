@@ -37,7 +37,8 @@ class IteratorImages:
 
     def processed_image(self, img, size):
         batch = img.shape[0]
-        temp_x = np.zeros(shape=(batch, *size, 1), dtype=np.float32)
+        img = img.astype(int)
+        temp_x = np.zeros(shape=(batch, *size, 1), dtype=int)
         temp_y = np.zeros(shape=(batch, *size, 2), dtype=np.float32)
 
         i = 0
