@@ -1,3 +1,29 @@
+import pandas as pd
+import numpy as np
+from PIL import Image
+
+
+class DataSet:
+
+    def __init__(self, path="data", stat="train"):
+        self.path = path
+        dinfo = pd.read_csv(f"{path}/info.csv")
+        self.dinfo = dinfo[dinfo["data set"] == stat]
+
+    def get_data(self):
+        size = len(self.dinfo.filepaths)
+        x_data = np.zeros((size, 224, 224, 3), dtype=np.uint8)
+        y_data = np.zeros((size,), dtype=np.uint8)
+        n = 0
+        for id, fl, *_ in self.dinfo.values:
+            x_data[n] = np.array(Image.open(f"{self.path}/{fl}"), dtype=np.uint8)
+            y_data[n] = id
+
+            n += 1
+
+        return x_data, y_data
+
+
 def grey_in_lab(img: np.array):
     """
 
