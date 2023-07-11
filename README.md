@@ -62,4 +62,12 @@ https://avatars.mds.yandex.net/get-images-cbir/371729/s_sBw6Ki4LByJ-eREvIwvA6347
 ![output](https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/271ea7ce-9795-45ee-afbd-9f86b1b48ca3)
 
 
+Еще несколько вариантов, как выглядит расскрашивание на данных где не видно оригинал:
+![Unknown-16](https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/8eefb1f4-a417-4fe4-ab73-30d76e86431a)
+![Unknown-11](https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/597d2061-63fd-422a-8458-28a79600fdf0)
+![Unknown-18](https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/ea20f00f-94af-469e-988e-0e2106d8deb0)
+![Unknown-17](https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/a5d35f68-70ed-4396-9f31-f90e58623030)
+
+
+Можно обратить внимание, что края достаточно четкие, это я думаю, потому что в Inception были исполльзованы свертки 1х1, которые хорошо сохраняют исходные края 
 
