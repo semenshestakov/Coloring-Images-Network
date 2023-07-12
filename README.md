@@ -21,9 +21,10 @@
 
 Такая получилась сеть.
 
-...
+<img width="16384" alt="Untitled" src="https://github.com/semenshestakov/Coloring-Images-Network/assets/94396766/74f8bc01-411b-4c55-aeaf-f074cc8c3d31">
 
-ссылка на figma  ...
+
+ссылка на figma https://www.figma.com/file/qaSDSXUYo8yYm1U1XW7Keh/Untitled?type=whiteboard&node-id=0%3A1&t=PjbdVwTN3DFdnmAi-1
 
 Обучал я в Colab, каждая эпоха длилась примерно до 800 сек. Обучал 33 эпохи, но по-сути после 15, обучение было бессмысленное.
 В данной сети, по-хорошему надо уменьшить(подобрать), количество нейронов в слое который разветвляется на классификатор и в "преобразователь". Так же возможно добавить Dropout перед последним слоем классификации.
